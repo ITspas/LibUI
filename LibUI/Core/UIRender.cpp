@@ -1168,41 +1168,42 @@ void CRenderEngine::DrawRoundRect(HDC hDC, const RECT& rc, int nSize, int width,
 
 void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, int iFont, UINT uStyle)
 {
-// 	GdiplusInit();
-// 
-// 	int nLen = MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,pstrText,-1,NULL,0);
-// 	if(nLen == 0)return;
-// 	wchar_t *wstr = (wchar_t *)malloc(nLen * sizeof(wchar_t));
-// 	MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,pstrText,-1,wstr,nLen);
-// 	
-// 
-// 	Gdiplus::Graphics graphics(hDC);
-// 	if(GetAValue(dwTextColor)==0xFF)
-// 		dwTextColor-=0x01000000;
-// 	SolidBrush brush(dwTextColor);
-// 	Font font(hDC,pManager->GetFont(iFont));
-// 	RectF rect((float)rc.left,(float)rc.top,(float)rc.right-rc.left,(float)rc.bottom-rc.top);
-// 	StringFormat format;
-// 	if ((uStyle | DT_CENTER) == uStyle )
-// 		format.SetAlignment(StringAlignmentCenter);
-// 	if((uStyle | DT_RIGHT) == uStyle)
-// 		format.SetAlignment(StringAlignmentFar);
-// 	if ((uStyle | DT_VCENTER) == uStyle)
-// 		format.SetLineAlignment(StringAlignmentCenter);
-// 	free(wstr);
-// 
-// 	if ((uStyle | DT_BOTTOM) == uStyle)
-// 		format.SetLineAlignment(StringAlignmentFar);
-// 
-// 	graphics.DrawString(wstr,-1,&font,rect,&format,&brush);
-// 	graphics.ReleaseHDC(hDC);
+	GdiplusInit();
+
+	int nLen = MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,pstrText,-1,NULL,0);
+	if(nLen == 0)return;
+	wchar_t *wstr = (wchar_t *)malloc(nLen * sizeof(wchar_t));
+	MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,pstrText,-1,wstr,nLen);
+	
+
+	Gdiplus::Graphics graphics(hDC);
+	if(GetAValue(dwTextColor)==0xFF)
+		dwTextColor-=0x01000000;
+	SolidBrush brush(dwTextColor);
+	Font font(hDC,pManager->GetFont(iFont));
+	RectF rect((float)rc.left,(float)rc.top,(float)rc.right-rc.left,(float)rc.bottom-rc.top);
+	StringFormat format;
+	if ((uStyle | DT_CENTER) == uStyle )
+		format.SetAlignment(StringAlignmentCenter);
+	if((uStyle | DT_RIGHT) == uStyle)
+		format.SetAlignment(StringAlignmentFar);
+	if ((uStyle | DT_VCENTER) == uStyle)
+		format.SetLineAlignment(StringAlignmentCenter);
+
+	if ((uStyle | DT_BOTTOM) == uStyle)
+		format.SetLineAlignment(StringAlignmentFar);
+
+	graphics.DrawString(wstr,-1,&font,rect,&format,&brush);
+	graphics.ReleaseHDC(hDC);
+	free(wstr);
+
 //	   Old Code
-    ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
-    ::SetBkMode(hDC, TRANSPARENT);
-    ::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
-    HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
-    ::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
-    ::SelectObject(hDC, hOldFont);
+//     ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
+//     ::SetBkMode(hDC, TRANSPARENT);
+//     ::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+//     HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
+//     ::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
+//     ::SelectObject(hDC, hOldFont);
 }
 
 void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTSTR pstrText, DWORD dwTextColor, RECT* prcLinks, CStdString* sLinks, int& nLinkRects, UINT uStyle)
