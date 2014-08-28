@@ -1170,11 +1170,6 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTS
 {
 	GdiplusInit();
 
-	int nLen = MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,pstrText,-1,NULL,0);
-	if(nLen == 0)return;
-	wchar_t *wstr = (wchar_t *)malloc(nLen * sizeof(wchar_t));
-	MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,pstrText,-1,wstr,nLen);
-	
 
 	Gdiplus::Graphics graphics(hDC);
 	if(GetAValue(dwTextColor)==0xFF)
@@ -1193,11 +1188,20 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI* pManager, RECT& rc, LPCTS
 	if ((uStyle | DT_BOTTOM) == uStyle)
 		format.SetLineAlignment(StringAlignmentFar);
 
-	graphics.DrawString(wstr,-1,&font,rect,&format,&brush);
-	graphics.ReleaseHDC(hDC);
+#ifndef UNICODE
+	int nLen = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pstrText, -1, NULL, 0);
+	if (nLen == 0)return;
+	wchar_t *wstr = (wchar_t *)malloc(nLen * sizeof(wchar_t));
+	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pstrText, -1, wstr, nLen);
+	graphics.DrawString(wstr, -1, &font, rect, &format, &brush);
 	free(wstr);
+#else
+	graphics.DrawString(pstrText, -1, &font, rect, &format, &brush);
+#endif
 
-//	   Old Code
+	graphics.ReleaseHDC(hDC);
+
+// 	   Old Code
 //     ASSERT(::GetObjectType(hDC)==OBJ_DC || ::GetObjectType(hDC)==OBJ_MEMDC);
 //     ::SetBkMode(hDC, TRANSPARENT);
 //     ::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));

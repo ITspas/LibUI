@@ -24,7 +24,7 @@ namespace LibUI{
 		CWinWnd(void);
 		~CWinWnd(void);
 
-		LPCSTR GetWindowClassName() const;
+		LPCTSTR GetWindowClassName() const;
 
 		virtual LRESULT HandleMessage( UINT uMsg, WPARAM wParam, LPARAM lParam );
 

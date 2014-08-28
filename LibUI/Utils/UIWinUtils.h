@@ -18,6 +18,6 @@ namespace LibUI{
 	class UILIB_API CWinUtils
 	{
 	public:
-		static void CSkin_Load(CWinWnd *pWinWnd,const char *path,const char *skin,CSkin type = SKIN_DIR);
+		static void CSkin_Load(CWinWnd *pWinWnd,const TCHAR *path,const TCHAR *skin,CSkin type = SKIN_DIR);
 	};
 };

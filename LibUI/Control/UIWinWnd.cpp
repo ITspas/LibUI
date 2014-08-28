@@ -15,7 +15,7 @@ namespace LibUI{
 	{
 	}
 
-	LPCSTR CWinWnd::GetWindowClassName() const
+	LPCTSTR CWinWnd::GetWindowClassName() const
 	{
 		return _T("CUiLib_WinWnd");
 	}

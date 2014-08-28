@@ -16,7 +16,7 @@ int WINAPI WinMain(  HINSTANCE hInstance,  HINSTANCE hPrevInstance,  LPSTR lpCmd
 
 	pWinWnd->Create(NULL,_T("Main"),UI_WNDSTYLE_FRAME,0L);
 
-	CWinUtils::CSkin_Load(pWinWnd,"Skin\\SkinRes","skin.xml");
+	CWinUtils::CSkin_Load(pWinWnd,_T("Skin\\SkinRes"),_T("skin.xml"));
 
 	::ShowWindow(pWinWnd->GetHWND(),SW_SHOW);
 

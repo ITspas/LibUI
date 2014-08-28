@@ -8,8 +8,8 @@ namespace LibUI{
 		else return NULL;
 	}
 
-	void CWinUtils::CSkin_Load( CWinWnd *pWinWnd,const char *path,const char *skin,CSkin type /*= SKIN_DIR*/ )
-	{
+	void CWinUtils::CSkin_Load( CWinWnd *pWinWnd,const TCHAR *path,const TCHAR *skin,CSkin type /*= SKIN_DIR*/ )
+{
 		if(!pWinWnd || !path || !skin)return;
 		CPaintManagerUI *pPaintManager = pWinWnd->GetPaintManager();
 		path = pPaintManager->GetInstancePath() + path;

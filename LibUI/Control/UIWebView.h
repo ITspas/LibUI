@@ -17,7 +17,7 @@ namespace LibUI{
 
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
-		virtual LPCSTR GetClass() const;
+		virtual LPCTSTR GetClass() const;
 
 		void Navigate(LPCTSTR lpszUrl);
 

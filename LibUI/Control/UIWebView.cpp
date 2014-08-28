@@ -6,13 +6,13 @@
 namespace LibUI{
 
 	CWebViewUI::CWebViewUI(void) :
-		m_url(""),
+		m_url(_T("")),
 		m_dwCookie(0),
 		m_pHandler(NULL),
 		m_pWebBroswer(NULL),
 		m_bConextMenu(S_OK)
 	{
-		SetAttribute("clsid","{8856F961-340A-11D0-A96B-00C04FD705A2}");
+		SetAttribute(_T("clsid"),_T("{8856F961-340A-11D0-A96B-00C04FD705A2}"));
 	}
 
 
@@ -23,7 +23,7 @@ namespace LibUI{
 		ReleaseControl();
 	}
 
-	LPCSTR CWebViewUI::GetClass() const
+	LPCTSTR CWebViewUI::GetClass() const
 	{
 		return _T("WebViewUI");
 	}
@@ -114,7 +114,20 @@ namespace LibUI{
 			BSTR url;
 			if(SUCCEEDED(m_pWebBroswer->get_LocationURL(&url)))
 			{
+				
+#ifdef UNICODE
+				char *charUrl = _com_util::ConvertBSTRToString(url);
+				int nLen = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, charUrl, -1, NULL, 0);
+				if (nLen == 0)return NULL;
+				wchar_t *wtemp = (wchar_t *)malloc(nLen * sizeof(wchar_t));
+				MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, charUrl, -1, wtemp, nLen);
+				wchar_t wstr[sizeof(wtemp)];
+				wcscpy(wstr, wtemp);
+				free(wtemp);
+				return CStdString(wstr);
+#else
 				return _com_util::ConvertBSTRToString(url);
+#endif 
 			}
 		}
 		return NULL;
@@ -145,12 +158,25 @@ namespace LibUI{
 		{
 			BSTR url = pDispParams->rgvarg[5].pvarVal->bstrVal;
 			CStdString strUrl;
+#ifdef UNICODE
+			char *charUrl = _com_util::ConvertBSTRToString(url);
+			int nLen = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, charUrl, -1, NULL, 0);
+			if (nLen == 0)return NULL;
+			wchar_t *wtemp = (wchar_t *)malloc(nLen * sizeof(wchar_t));
+			MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, charUrl, -1, wtemp, nLen);
+			wchar_t wstr[sizeof(wtemp)];
+			wcscpy(wstr, wtemp);
+			free(wtemp);
+			strUrl.Append(wstr);
+#else
 			strUrl.Append(_com_util::ConvertBSTRToString(url));
+#endif // UNICODE
+
 			int idx = strUrl.Find(_T("://"));
 			if(idx > 0 && strUrl.Left(idx) == _T("app"))
 			{
 				*pDispParams->rgvarg[0].pboolVal = VARIANT_TRUE;
-				GetManager()->SendNotify(this,"ExtURL",(WPARAM)strUrl.GetData());
+				GetManager()->SendNotify(this,_T("ExtURL"),(WPARAM)strUrl.GetData());
 			}
 		}
 		else if (dispIdMember == DISPID_NEWWINDOW3)
